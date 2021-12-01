@@ -5,12 +5,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:signin/provider/google_signin.dart';
 
-class LoggedIn extends StatelessWidget {
+class LoggedIn extends StatefulWidget {
+  @override
+  _LoggedInState createState() => _LoggedInState();
+}
+
+class _LoggedInState extends State<LoggedIn> {
+  User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
     print(user);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Logged In'),
@@ -45,7 +50,7 @@ class LoggedIn extends StatelessWidget {
             ),
             SizedBox(height: 12),
             Text(
-              'Email: ' + user.email!,
+              'Email: ' + user!.email!,
             ),
             SizedBox(
               height: 50,
@@ -57,6 +62,13 @@ class LoggedIn extends StatelessWidget {
               ),
               label: Text('Logout'),
               onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    backgroundColor: Colors.blue,
+                    content: Text('Logout'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
                 final provider =
                     Provider.of<GoogleSignInProvider>(context, listen: false);
                 provider.logout();
