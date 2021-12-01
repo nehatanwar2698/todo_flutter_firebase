@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: const CircularProgressIndicator(),
             );
           } else if (snapshot.hasData) {
             return LoggedIn();

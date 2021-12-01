@@ -10,10 +10,12 @@
 
     For more details:
     * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+    
 
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
+  <script src="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base"></script>
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -23,15 +25,39 @@
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="signin">
+  <meta name="apple-mobile-web-app-title" content="test">
+  <meta name="google-signin-client_id" content="1079871797281-ej2qaifgl6q5cf599id2ui2648j1va33.apps.googleusercontent.com">
+
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-  <title>signin</title>
+
+  <title>test</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+
+    <!-- Firebase Auth SDK -->
+    <script src="https://www.gstatic.com/firebasejs/7.20.0/firebase-auth.js"></script>
+    
+   
+
+  <script>// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
+  //web app firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAVkY-qiL01o_05jPxGQkyj3yGHcIkjVus",
+      authDomain: "login-46483.firebaseapp.com",
+      projectId: "login-46483",
+      storageBucket: "login-46483.appspot.com",
+      messagingSenderId: "1079871797281",
+      appId: "1:1079871797281:web:09a4ca10f7ec6d3a7c0b60",
+      measurementId: "G-T1W59GR32B"
+    };
+    //initialize  firebase
+    firebase.initializeApp(firebaseConfig)
+    </script>
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->

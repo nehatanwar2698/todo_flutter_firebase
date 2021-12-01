@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:signin/UIConstant/theme.dart';
 import 'package:signin/provider/google_signin.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -14,44 +15,70 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Align(
-            child: Container(
-              child: Text(
-                "Google Login",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          ElevatedButton.icon(
-            icon: FaIcon(
-              FontAwesomeIcons.google,
-              color: Colors.red,
-            ),
-            label: Text('sign in with google'),
-            onPressed: () {
-              final provider =
-                  Provider.of<GoogleSignInProvider>(context, listen: false);
+        body: Stack(children: <Widget>[
+      Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+        image: AssetImage("assets/images/startbg1.png"),
+      ))),
+      Padding(
+        padding:
+            const EdgeInsets.only(top: 40, left: 32, right: 32, bottom: 40),
+        child: Container(
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Align(
+                      child: Text("welcome to Tasks",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 18.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: FaIcon(
+                        FontAwesomeIcons.google,
+                        color: Colors.red,
+                      ),
+                      label: Padding(
+                        padding: const EdgeInsets.all(18.0),
+                        child: Text('Sign in with Google'),
+                      ),
+                      onPressed: () {
+                        final provider = Provider.of<GoogleSignInProvider>(
+                            context,
+                            listen: false);
 
-              provider.googleLogin();
-              // print('Button Pressed');
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Colors.white,
-              onPrimary: Colors.black,
-              shape: new RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(20.0),
-              ),
+                        provider.googleLogin();
+                        // print('Button Pressed');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: UIConstant.blue,
+                        onPrimary: Colors.white,
+                        shape: new RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(20.0),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+          ),
+        ),
+      )
+    ]));
   }
 }

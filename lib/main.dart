@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       create: (context) => GoogleSignInProvider(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'google login',
+        title: 'Todo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
