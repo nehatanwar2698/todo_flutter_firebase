@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:signin/UIConstant/theme.dart';
 
 class GoogleSignInProvider extends ChangeNotifier {
   static SnackBar customSnackBar({required String content}) {
@@ -40,8 +41,15 @@ class GoogleSignInProvider extends ChangeNotifier {
     }
   }
 
-  Future logout() async {
+  Future logout(context) async {
     await googleSignIn.disconnect();
     FirebaseAuth.instance.signOut();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: UIConstant.blue,
+        content: Text('Logout'),
+        duration: Duration(seconds: 1),
+      ),
+    );
   }
 }

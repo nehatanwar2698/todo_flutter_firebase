@@ -3,9 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:provider/provider.dart';
+import 'package:signin/UIConstant/theme.dart';
+import 'package:signin/page/add_task.dart';
+import 'package:signin/page/view_tasklist.dart';
+import 'package:signin/page/profile.dart';
 import 'package:signin/provider/google_signin.dart';
 
 class LoggedIn extends StatefulWidget {
+  const LoggedIn({Key? key}) : super(key: key);
+
   @override
   _LoggedInState createState() => _LoggedInState();
 }
@@ -18,73 +24,164 @@ class _LoggedInState extends State<LoggedIn> {
     print(user);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Logged In'),
+        title: Text("Welcome " + user!.displayName!),
         centerTitle: true,
+        backgroundColor: UIConstant.blue,
         actions: [
-          TextButton(
-              onPressed: () {},
-              child: Text(
-                'Logout',
-              ))
+          Theme(
+            data: Theme.of(context).copyWith(
+                textTheme: TextTheme().apply(bodyColor: Colors.black),
+                dividerColor: Colors.white,
+                iconTheme: IconThemeData(color: Colors.white)),
+            child: PopupMenuButton<int>(
+              color: UIConstant.blue,
+              itemBuilder: (context) => [
+                PopupMenuItem<int>(
+                    value: 0,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.person,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text("Profile")
+                      ],
+                    )),
+                PopupMenuItem<int>(
+                    value: 1,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.list,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text("Tasks List")
+                      ],
+                    )),
+                PopupMenuDivider(),
+                PopupMenuItem<int>(
+                    value: 2,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.logout,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text("Logout")
+                      ],
+                    )),
+              ],
+              onSelected: (item) => SelectedItem(context, item),
+            ),
+          ),
         ],
       ),
-      body: Container(
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            SizedBox(
-              height: 50,
-            ),
-            Text(
-              "Welcome " + user!.displayName!,
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 30),
-            CircleAvatar(
-              maxRadius: 30,
-              backgroundImage: NetworkImage(user!.photoURL!),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Name: ' + user!.displayName!,
-            ),
-            SizedBox(height: 12),
-            Text(
-              'Email: ' + user!.email!,
-            ),
-            SizedBox(
-              height: 50,
-            ),
-            ElevatedButton.icon(
-              icon: FaIcon(
-                FontAwesomeIcons.signOutAlt,
-                color: Colors.red,
-              ),
-              label: Text('Logout'),
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: Colors.blue,
-                    content: Text('Logout'),
-                    duration: Duration(seconds: 1),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Card(
+                margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              "Total Task",
+                              style: TextStyle(
+                                  color: UIConstant.blue,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Text(
+                              "15",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w300),
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              "Finished Task",
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            Text(
+                              "20",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w300),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                );
-                final provider =
-                    Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.logout();
-                // print('Button Pressed');
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white,
-                onPrimary: Colors.black,
-                shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(20.0),
                 ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        backgroundColor: UIConstant.blue,
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => AddTask()));
+          print("Add task");
+        },
+      ),
     );
+  }
+
+  void SelectedItem(BuildContext context, item) {
+    switch (item) {
+      case 0:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => Profile()));
+        break;
+      case 1:
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ViewTask()));
+        print("Add task");
+
+        break;
+      case 2:
+        print("User Logged out");
+
+        final provider =
+            Provider.of<GoogleSignInProvider>(context, listen: false);
+        provider.logout(context);
+
+        break;
+    }
   }
 }

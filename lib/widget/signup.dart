@@ -1,7 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:signin/UIConstant/theme.dart';
 import 'package:signin/provider/google_signin.dart';
@@ -17,7 +15,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
         body: Stack(children: <Widget>[
       Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
         image: AssetImage("assets/images/startbg1.png"),
       ))),
@@ -34,7 +32,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Align(
+                    const Align(
                       child: Text("welcome to Tasks",
                           style: TextStyle(
                               color: Colors.black,
