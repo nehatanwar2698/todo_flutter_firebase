@@ -46,6 +46,24 @@ class FirebaseApi {
         .catchError((error) => print("Failed to delete Task: $error"));
   }
 
+  static deleteSubTodo(String todoId, context) async {
+    final docTodo =
+        FirebaseFirestore.instance.collection('tasklist').doc(todoId);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: UIConstant.blue,
+        content: Text('Task Deleted'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+    print("doctodo $docTodo");
+
+    await docTodo
+        .delete()
+        .then((value) => print("Task Deleted"))
+        .catchError((error) => print("Failed to delete Task: $error"));
+  }
+
   static void updateTodo(String id, String title) async {
     final docTodo = FirebaseFirestore.instance
         .collection('todo')

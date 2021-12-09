@@ -42,7 +42,7 @@ class GoogleSignInProvider extends ChangeNotifier {
   }
 
   Future logout(context) async {
-    await googleSignIn.disconnect();
+    // await googleSignIn.disconnect();
     FirebaseAuth.instance.signOut();
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(

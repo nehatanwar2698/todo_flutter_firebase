@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class UIConstant {
   static const Color blue = Color(0xFF3557EF);
+  static const Color light = Color(0XFF7c92f5);
   static const Color white = Color(0xFFFFFFFF);
   // static const String fontfamily = 'sen-regular';
 

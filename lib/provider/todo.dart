@@ -34,5 +34,15 @@ class TodosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeSubTodo(String id, context) {
+    FirebaseApi.deleteSubTodo(id, context);
+    notifyListeners();
+  }
+
   void addSubTodo(Task task) => FirebaseApi.createSubTodo(task);
+  @override
+  void notifyListeners() {
+    // TODO: implement notifyListeners
+    super.notifyListeners();
+  }
 }
