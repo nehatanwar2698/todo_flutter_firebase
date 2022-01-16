@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:signin/UIConstant/theme.dart';
 import 'package:signin/model/task.dart';
@@ -6,6 +9,7 @@ import 'package:signin/model/todo.dart';
 
 class FirebaseApi {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
+
   static Future<String> createTodo(Todo todo) async {
     print('added to firebase');
     final docTodo = FirebaseFirestore.instance.collection('todo').doc();
@@ -29,21 +33,44 @@ class FirebaseApi {
     return list;
   }
 
-  static deleteTodo(String todoId, context) async {
-    final docTodo = FirebaseFirestore.instance.collection('todo').doc(todoId);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: UIConstant.blue,
-        content: Text('Task Deleted'),
-        duration: Duration(seconds: 1),
-      ),
-    );
-    print("doctodo $docTodo");
+  static Future<int> AllTask(email) async {
+    var collection = FirebaseFirestore.instance
+        .collection("tasklist")
+        .where('userEmail', isEqualTo: email);
 
-    await docTodo
-        .delete()
-        .then((value) => print("Task Deleted"))
-        .catchError((error) => print("Failed to delete Task: $error"));
+    var querySnapshot = await collection.get();
+
+    List<dynamic> list = querySnapshot.docs.toList();
+    var TaskList = list.length;
+
+    print("list complete task--${TaskList}");
+    return TaskList;
+  }
+
+  static deleteTodo(String todoId, context) async {
+    var collection1 = FirebaseFirestore.instance.collection('todo');
+    await collection1.doc(todoId).delete();
+
+    var collection = FirebaseFirestore.instance.collection('tasklist');
+    var snapshot =
+        await collection.where('mainTodoId', isEqualTo: todoId).get();
+    for (var doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
+    // final docTodo = FirebaseFirestore.instance.collection('todo').doc(todoId);
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   SnackBar(
+    //     backgroundColor: UIConstant.blue,
+    //     content: Text('Task Deleted'),
+    //     duration: Duration(seconds: 1),
+    //   ),
+    // );
+    // print("doctodo $docTodo");
+
+    // await docTodo
+    //     .delete()
+    //     .then((value) => print("Task Deleted"))
+    //     .catchError((error) => print("Failed to delete Task: $error"));
   }
 
   static deleteSubTodo(String todoId, context) async {
@@ -74,7 +101,7 @@ class FirebaseApi {
   }
 
   //sub task
-  static Future<String> createSubTodo(Task task) async {
+  static Future<String> createSubTodo(SubTask task) async {
     print('Sub task  to firebase');
     final docTodo = FirebaseFirestore.instance.collection('tasklist').doc();
 
@@ -86,7 +113,17 @@ class FirebaseApi {
 
     return docTodo.id;
   }
+
+  static uploadFile(String destination, File file) {
+    try {
+      final ref = FirebaseStorage.instance.ref(destination);
+      return ref.putFile(file);
+    } on FirebaseException catch (e) {
+      return null;
+    }
+  }
 }
+
  
 
 

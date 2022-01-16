@@ -41,32 +41,37 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 18.0),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      icon: FaIcon(
-                        FontAwesomeIcons.google,
-                        color: Colors.red,
-                      ),
-                      label: Padding(
-                        padding: const EdgeInsets.all(18.0),
-                        child: Text('Sign in with Google'),
-                      ),
-                      onPressed: () {
-                        final provider = Provider.of<GoogleSignInProvider>(
-                            context,
-                            listen: false);
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 18.0),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        icon: FaIcon(
+                          FontAwesomeIcons.google,
+                          color: Colors.white,
+                        ),
+                        label: Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Text(
+                            'Sign in with Google',
+                            style: TextStyle(fontSize: 19),
+                          ),
+                        ),
+                        onPressed: () {
+                          final provider = Provider.of<GoogleSignInProvider>(
+                              context,
+                              listen: false);
 
-                        provider.googleLogin();
-                        // print('Button Pressed');
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: UIConstant.blue,
-                        onPrimary: Colors.white,
-                        shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(20.0),
+                          provider.googleLogin();
+                          // print('Button Pressed');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: UIConstant.blue,
+                          onPrimary: Colors.white,
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(20.0),
+                          ),
                         ),
                       ),
                     ),

@@ -54,6 +54,7 @@ class _ViewTaskState extends State<ViewTask> {
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("todo")
+              .where('userEmail', isEqualTo: user!.email!)
               .orderBy('createdTime', descending: true)
               .snapshots(),
           builder: (BuildContext context,
@@ -63,7 +64,7 @@ class _ViewTaskState extends State<ViewTask> {
               return CircularProgressIndicator();
             } else {
               final list = querySnapshot.data!.docs;
-              print("list from here---$list");
+              // print("list from here---$list");
 //
               return ListView.builder(
                   itemCount: list.length,
@@ -164,6 +165,7 @@ class _ViewTaskState extends State<ViewTask> {
                       id: DateTime.now().toString(),
                       title: _textFieldController.text,
                       userEmail: user!.email!,
+                      userProfile: user!.photoURL!,
                       createdTime: DateTime.now(),
                     );
                     final provider =

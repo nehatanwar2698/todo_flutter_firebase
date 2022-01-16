@@ -18,7 +18,7 @@ class _AddTaskState extends State<AddTask> {
   var _category;
 
   String valueChanged1 = DateTime.now().toString();
-  String _valueToValidate1 = '';
+
   String _valueSaved1 = '';
   TextEditingController _addTaskFieldController = TextEditingController();
 
@@ -83,8 +83,10 @@ class _AddTaskState extends State<AddTask> {
                 ),
               ),
               StreamBuilder<QuerySnapshot>(
-                  stream:
-                      FirebaseFirestore.instance.collection('todo').snapshots(),
+                  stream: FirebaseFirestore.instance
+                      .collection('todo')
+                      .where('userEmail', isEqualTo: user!.email!)
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData)
                       return const Center(
@@ -135,31 +137,44 @@ class _AddTaskState extends State<AddTask> {
             ],
           ),
           Container(
+            padding: EdgeInsets.only(left: 23, top: 20, bottom: 15),
+            alignment: Alignment.bottomLeft,
+            child: Text(
+              " Date & Time",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+          ),
+          Container(
             margin: const EdgeInsets.only(left: 10, right: 10),
             padding: const EdgeInsets.all(20.0),
             alignment: Alignment.centerLeft,
             decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
             child: DateTimePicker(
               type: DateTimePickerType.dateTimeSeparate,
-              dateMask: 'yyyy,MMM,d',
+              // dateMask: 'yyyy,MMM,d',
+              dateMask: 'd/MMM/yyyy',
               initialValue: DateTime.now().toString(),
               firstDate: DateTime(2000),
               lastDate: DateTime(2100),
               icon: Icon(Icons.event),
               dateLabelText: 'Date',
               timeLabelText: "Hour",
+              // use24HourFormat: false,
               selectableDayPredicate: (date) {
                 // Disable weekend days to select from the calendar
-                if (date.weekday == 6 || date.weekday == 7) {
-                  return false;
-                }
+                // if (date.weekday == 6 || date.weekday == 7) {
+                //   return false;
+                // }
 
                 return true;
               },
               onChanged: (val) {
                 setState(() {
                   valueChanged1 = val;
-                  print(valueChanged1);
+                  print("date and time ${valueChanged1}");
                 });
               },
               // validator: (val) {
@@ -186,11 +201,13 @@ class _AddTaskState extends State<AddTask> {
               RaisedButton(
                 onPressed: () {
                   if (validate()) {
-                    final task = Task(
+                    final task = SubTask(
                       id: DateTime.now().toString(),
                       mainTodoId: _category,
                       subTask: _addTaskFieldController.text,
                       createdTime: DateTime.now(),
+                      dateTime: valueChanged1,
+                      userEmail: user!.email!,
                     );
                     final provider =
                         Provider.of<TodosProvider>(context, listen: false);

@@ -1,13 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:provider/provider.dart';
 import 'package:signin/UIConstant/theme.dart';
 import 'package:signin/page/add_task.dart';
 import 'package:signin/provider/todo.dart';
-import 'package:signin/widget/sub_task.dart';
+import 'package:signin/widget/todo_complete_list.dart';
+import 'package:signin/widget/todo_list_widget.dart';
 import 'package:signin/page/view_tasklist.dart';
 import 'package:signin/page/profile.dart';
 import 'package:signin/provider/google_signin.dart';
@@ -21,10 +20,12 @@ class LoggedIn extends StatefulWidget {
 
 class _LoggedInState extends State<LoggedIn> {
   User? user = FirebaseAuth.instance.currentUser;
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<TodosProvider>(context, listen: false);
+    List<Widget> tabs = <Widget>[TodoListWidget(), TodoCompleteListWidget()];
+
     // print(user);
     return Scaffold(
       appBar: AppBar(
@@ -89,55 +90,26 @@ class _LoggedInState extends State<LoggedIn> {
           ),
         ],
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("todo")
-            .orderBy('createdTime', descending: true)
-            .snapshots(),
-        builder:
-            (BuildContext context, AsyncSnapshot<QuerySnapshot> querySnapshot) {
-          if (querySnapshot.hasError) return Text("Some Error Occur");
-          if (querySnapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else {
-            final list = querySnapshot.data!.docs;
-            print("list from here---$list");
-//
-            return Container(
-              child: ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 13.0),
-                      child: Card(
-                        color: UIConstant.blue,
-                        elevation: 10,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: ListTile(
-                          title: Text(list[index]['title'],
-                              style: TextStyle(
-                                  color: UIConstant.white, fontSize: 22)),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MainList(
-                                    task_id: list[index]['id'],
-                                    taskname: list[index]['title']),
-                              ),
-                            );
-                          },
-
-                          // children: _getChildren(mainTask.length,
-                        ),
-                      ),
-                    );
-                  }),
-            );
-          }
-        },
-      )
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: UIConstant.blue,
+        unselectedItemColor: Colors.white.withOpacity(0.7),
+        selectedItemColor: Colors.white,
+        currentIndex: selectedIndex,
+        onTap: (index) => setState(() {
+          selectedIndex = index;
+        }),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.fact_check_outlined),
+            label: 'Todos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.done, size: 28),
+            label: 'Completed',
+          ),
+        ],
+      ),
+      body: tabs[selectedIndex],
       // body: SingleChildScrollView(
       //   child: SafeArea(
       //     child: Column(
@@ -203,7 +175,7 @@ class _LoggedInState extends State<LoggedIn> {
       //     ),
       //   ),
       // ),
-      ,
+
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.of(context)
