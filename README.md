@@ -10,6 +10,8 @@
 
 --Todo APP in Flutter used Firebase for storing todos .
 --used google Login for authentication.
+--use provider for state management
+--use localnotifiation using firebase cloud messaging
 --every user have thier seperate todo list with sub list
 --also using bottom navigation bar for showing  All  todo and complete todos 
 
